@@ -1,0 +1,57 @@
+---
+title: "Exercice de Régression"
+author: "Kegeline Oscar"
+date: '2024-05-05'
+output: html_document
+---
+
+# Importer les données CreditBancaire.csv 
+data <- read.csv("CreditBancaire.csv")
+
+# Afficher les premières lignes pour vérification
+head(data)
+
+# Régression linéaire du nombre de jours de retards sur les variables Credit et Type
+Reg <- lm(Jours ~ Credit + Type,data)
+
+# Afficher les résultats détaillés
+summary(Reg)
+
+# Afficher le tableau des coefficients incluant les statistiques de Student et probabilités
+coefficients_tableau <- coef(summary(Reg))
+coefficients_tableau
+
+# Afficher les coefficients estimés et les valeurs de la statistique de Student
+coefficients_unique <- coef(summary(Reg))[, c(1, 3)]
+coefficients_unique
+
+# Créer le nuage de points
+plot(data$Credit, data$Jours_retards,
+     main = "Nuage de points avec droite de régression", 
+     xlab = "Crédit", 
+     ylab = "Nombre de jours de retards",
+     pch = 16)  
+
+# Obtenir les coefficients du modèle
+coefficients <- coef(Reg)
+
+# Extraire l'ordonnée à l'origine et le coefficient de pente
+intercept <- coefficients[1]
+slope <- coefficients[2]
+
+# Ajouter la droite de régression
+abline(a = intercept, b = slope, col = "red", lwd = 2)
+
+Fonction_Reg <- function (data, y, x) {
+# Régression linéaire de y sur x
+  Reg <- lm (data[[y]] ~ data[[x]], data)
+  
+  
+#Extraire les coefficients et les statistiques de Student
+  coefficients <- coef(summary(Reg))[, c(1,3)]
+  
+# Retourner les coefficients et leurs statistiques de Student
+  return(coefficients)
+}
+
+
